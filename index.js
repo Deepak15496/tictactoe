@@ -102,7 +102,22 @@ resumeBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
-    location.reload();
+    boxes.forEach(box => {
+        box.innerText = '';
+        box.style.pointerEvents = 'none';
+        box.style.cursor = 'not-allowed';
+    });
+    startBtn.style.display = 'inline-block';
+    pauseBtn.style.display = 'inline-block';
+    resumeBtn.style.display = 'none';
+    pauseBtn.disabled = true;
+    resetBtn.disabled = true;
+    turnInfo.style.display = 'none';
+    timeElapsed.style.display = 'none';
+    msg.style.display = 'inline-block';
+    timeElapsed.value = '00:00:00';
+    stopTimer();
+    elapsedTime = 0;
 });
 
 boxes.forEach(box => {
