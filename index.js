@@ -106,6 +106,7 @@ resetBtn.addEventListener('click', () => {
         box.innerText = '';
         box.style.pointerEvents = 'none';
         box.style.cursor = 'not-allowed';
+        box.style.backgroundColor = '#f5d4d4';
     });
     startBtn.style.display = 'inline-block';
     pauseBtn.style.display = 'inline-block';
@@ -170,6 +171,9 @@ function checkWin(){
         const [a, b, c] = combination; 
         if (boxes[a].innerText && boxes[a].innerText === boxes[b].innerText && boxes[a].innerText === boxes[c].innerText) {
             winner = boxes[a].innerText;
+            boxes[a].style.backgroundColor = '#90ee90';
+            boxes[b].style.backgroundColor = '#90ee90';
+            boxes[c].style.backgroundColor = '#90ee90';
         }
     });
 
