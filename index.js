@@ -6,7 +6,18 @@ const pauseBtn = document.getElementById('pauseBtn');
 const resumeBtn = document.getElementById('resumeBtn');
 const timeElapsed = document.getElementById('timeElapsed');
 const msg = document.getElementById('msg');
+const myDialog = document.getElementById('playerDialog');
+const singlePlayerBtn = document.getElementById('singlePlayerBtn');
+const twoPlayerBtn = document.getElementById('twoPlayerBtn');
+const playerFieldset = document.getElementById('playerFieldset');
+const player1Input = document.getElementById('player1');
+const player2Input = document.getElementById('player2');
+const cancelBtn = document.getElementById('cancel');
+const confirmBtn = document.getElementById('confirm');
+const closeBtn = document.getElementById('closeBtn');
 
+let currentPlayer = 'X'; // 'X' starts first in cse of two players
+let choice; // 1 for single player, 2 for two players
 let startTime;       // When the timer started
 let elapsedTime = 0; // Total elapsed time (including before pause)
 let timerInterval;   // Reference to setInterval
@@ -63,13 +74,14 @@ function updateDisplay(hours, minutes, seconds) {
     timeElapsed.value = formatted;
 }
 
-
-startBtn.addEventListener('click', () => {
-   const boxes = document.querySelectorAll('.box');
+function initializeGame(choices){
+    choice = choices;
+    console.log(choice);
+    const boxes = document.querySelectorAll('.box');
    
     boxes.forEach((box)=>{
-         box.style.pointerEvents = 'auto';
-         box.style.cursor = 'pointer';
+        box.style.pointerEvents = 'auto';
+        box.style.cursor = 'pointer';
     });
     startBtn.style.display = 'none';
     pauseBtn.disabled = false;
@@ -78,7 +90,62 @@ startBtn.addEventListener('click', () => {
     timeElapsed.style.display = 'inline-block';
     turnInfo.style.display = 'inline-block';
     startTimer();
-    document.getElementById('turnInfo').value = "X's Turn";
+    turnInfo.value = choice===1?"Your Turn":`${player1Input.value}'s Turn`;
+    console.log(turnInfo.value);
+}
+
+singlePlayerBtn.addEventListener('click', () => {
+    myDialog.close('start1');
+});
+
+twoPlayerBtn.addEventListener('click', () => {
+    cancelBtn.disabled = false;
+    confirmBtn.disabled = false;
+    playerFieldset.disabled = false;
+});
+
+cancelBtn.addEventListener('click', () => {
+    player1Input.value = '';
+    player2Input.value = '';
+    startBtn.disabled = false;
+    cancelBtn.disabled = true;
+    confirmBtn.disabled = true;
+    playerFieldset.disabled = true;
+    myDialog.close('cancel');
+});
+
+closeBtn.addEventListener('click', () => {
+    player1Input.value = '';
+    player2Input.value = '';
+    startBtn.disabled = false;
+    cancelBtn.disabled = true;
+    confirmBtn.disabled = true;
+    playerFieldset.disabled = true;
+    myDialog.close('cancel');
+});
+
+confirmBtn.addEventListener('click', () => {
+    if (player1Input.value.trim() === '' || player2Input.value.trim() === '') {
+        alert('Please enter names for both players.');
+        return;
+    }
+    cancelBtn.disabled = true;
+    confirmBtn.disabled = true;
+    playerFieldset.disabled = true;
+    myDialog.close('start2');
+});
+
+startBtn.addEventListener('click', () => {
+    myDialog.showModal();
+    startBtn.disabled = true; // Prevent multiple clicks
+    myDialog.addEventListener('close', () => {
+        if (myDialog.returnValue === 'start1') {
+            initializeGame(1);
+        } 
+        else if (myDialog.returnValue === 'start2') {  
+            initializeGame(2);
+        }    
+    });
 });
 
 pauseBtn.addEventListener('click', () => {
@@ -113,6 +180,7 @@ resetBtn.addEventListener('click', () => {
     resumeBtn.style.display = 'none';
     pauseBtn.disabled = true;
     resetBtn.disabled = true;
+    startBtn.disabled = false;
     turnInfo.style.display = 'none';
     timeElapsed.style.display = 'none';
     msg.innerText= 'Welcome to TIC TAC TOE ! Start the game to begin'
@@ -120,17 +188,27 @@ resetBtn.addEventListener('click', () => {
     timeElapsed.value = '00:00:00';
     stopTimer();
     elapsedTime = 0;
+    player1Input.value = '';
+    player2Input.value = '';
+    cancelBtn.disabled = true;
+    confirmBtn.disabled = true;
+    playerFieldset.disabled = true;
+    currentPlayer = 'X'; // Reset to 'X' starting first
 });
 
 boxes.forEach(box => {
     box.addEventListener('click', () => {
         if (box.innerText === '') { 
-            box.innerText = 'X';
-            const win = checkWin();
-            if (win) return;
-            document.getElementById('turnInfo').value = "O's Turn";
+            box.innerText = currentPlayer;
             box.style.pointerEvents = 'none';
             box.style.cursor = 'not-allowed';
+            const win = checkWin();
+            if (win) return;
+            turnInfo.value = choice===1?"Computer's Turn":`${currentPlayer === 'X' ? player2Input.value : player1Input.value}'s Turn`;
+            if (choice === 2){  // If two players, no computer move
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+                return; 
+            }  
             setTimeout(computerMove, 500);
         }
     });
@@ -149,7 +227,7 @@ function computerMove() {
         selectedBox.style.pointerEvents = 'none';
         selectedBox.style.cursor = 'not-allowed';
         checkWin();
-        document.getElementById('turnInfo').value = "X's Turn";
+        document.getElementById('turnInfo').value = "Your Turn";
         
     }
 }
@@ -179,7 +257,7 @@ function checkWin(){
 
     if (winner) {
         msg.style.display = 'block';
-        msg.innerText = `${winner} Wins!`;
+        msg.innerText = choice === 1 ? (winner === 'X' ? "You Win!" : "Computer Wins!") : (winner === 'X' ? `${player1Input.value} Wins!` : `${player2Input.value} Wins!`);
         boxes.forEach(box => {
             box.style.pointerEvents = 'none';
             box.style.cursor = 'not-allowed';
@@ -199,3 +277,5 @@ function checkWin(){
     }
     return winner;
 }
+
+
