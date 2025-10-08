@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div id="message">
+        <h2 id="msg">Welcome to TIC TAC TOE ! Start the game to begin</h2>
+        <input id="turnInfo" placeholder="Turn Info" value="" readonly >
+        <input id="timeElapsed" placeholder="Time Elapsed" value="00:00:00" readonly ></input>
+    </div>
+ 
+    <div class="container">
+        <div class="gameBoard">
+            <div class="box" id="Box0" contenteditable="false"></div>
+            <div class="box" id="Box1"></div>
+            <div class="box" id="Box2"></div>
+            <div class="box" id="Box3"></div>
+            <div class="box" id="Box4"></div>
+            <div class="box" id="Box5"></div>
+            <div class="box" id="Box6"></div>
+            <div class="box" id="Box7"></div>
+            <div class="box" id="Box8"></div>
+        </div>
+        <div class="controls">
+             <button id="startBtn"  >Start</button>
+             <button id="pauseBtn" disabled>Pause</button>
+             <button id="resumeBtn">Resume</button>
+             <button id="resetBtn" disabled>Reset</button>
+        </div>
+       
+    </div>
+   
+    <script src="index.js"></script>
+</body>
+</html>
