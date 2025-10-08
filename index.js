@@ -66,6 +66,7 @@ function updateDisplay(hours, minutes, seconds) {
 
 startBtn.addEventListener('click', () => {
    const boxes = document.querySelectorAll('.box');
+   
     boxes.forEach((box)=>{
          box.style.pointerEvents = 'auto';
          box.style.cursor = 'pointer';
