@@ -114,6 +114,7 @@ resetBtn.addEventListener('click', () => {
     resetBtn.disabled = true;
     turnInfo.style.display = 'none';
     timeElapsed.style.display = 'none';
+    msg.innerText= 'Welcome to TIC TAC TOE ! Start the game to begin'
     msg.style.display = 'inline-block';
     timeElapsed.value = '00:00:00';
     stopTimer();
@@ -181,7 +182,6 @@ function checkWin(){
         });
         turnInfo.style.display = 'none';
         pauseBtn.disabled = true;
-        resumeBtn.disabled = true;
         stopTimer();
 
     }
@@ -190,7 +190,6 @@ function checkWin(){
         msg.innerText = "It's a Draw!";
         turnInfo.style.display = 'none';
         pauseBtn.disabled = true;
-        resumeBtn.disabled = true;
         winner = 'Draw';
         stopTimer();
     }
